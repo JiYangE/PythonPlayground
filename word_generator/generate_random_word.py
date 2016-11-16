@@ -8,8 +8,12 @@ def generate(words, n):
         words.remove(selected)
         print(selected, end=' ')
 
-GROUP_SIZE = 20
-TOP_WORD = 3000
+def generate_bound(n):
+    # 2.5538^10 = 11800
+    return [math.floor(2.5538**(i+1)) for i in range(n)]
+
+GROUP_SIZE = 25
+TOP_WORD = 14200
 GROUP_AMOUNT = 10
 
 data = pd.read_excel('source.xls')
@@ -34,15 +38,34 @@ word_list = [row['Word'] for idx, row in df.iterrows()]
 bin_size = df.shape[0]
 store_list = [[] for i in range(1, GROUP_AMOUNT + 1)]
 
-LIST_SIZE = df.shape[0] // GROUP_AMOUNT
-for wd in word_list:
+list_bound = generate_bound(GROUP_AMOUNT)
+list_bound.insert(0, 0)
+
+for i in range(len(list_bound)):
     try:
-        wd_idx = word_list.index(wd) // LIST_SIZE
-        store_list[wd_idx].append(wd)
+        lower = list_bound[i]
+        upper = list_bound[i + 1]
+    except:
+        break
+    try:
+        for wd in word_list:
+            try:
+                wd_idx = word_list.index(wd)
+                if wd_idx > lower and wd_idx <= upper:
+                    store_list[i].append(wd)
+            except:
+                break
     except:
         break
 
 for i in range(len(store_list)):
-    print('\nGroup {}'.format(i))
-    generate(store_list[i], GROUP_SIZE)
-    print()
+    if  len(store_list[i]) < GROUP_SIZE:
+        print('\nGroup {}'.format(i))
+        for wd in store_list[i]:
+            print(wd, end=' ')
+    else:
+        try:
+            print('\nGroup {}'.format(i))
+            generate(store_list[i], GROUP_SIZE)
+        except:
+            break
