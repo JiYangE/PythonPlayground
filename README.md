@@ -8,3 +8,5 @@ My playground for python programming.
 [Naive crawler for Wikipedia (My first crawler?)](https://github.com/Kulbear/PythonPlayground/tree/master/web_scraping)
 
 [Generate Chinese words from source dictionary](https://github.com/Kulbear/PythonPlayground/tree/master/word_generator)
+
+[Chinese words test](https://github.com/Kulbear/PythonPlayground/tree/master/word_test)
