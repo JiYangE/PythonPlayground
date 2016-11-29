@@ -1,4 +1,5 @@
 import random
+from math import ceil
 
 
 def ask_pinyin(question):
@@ -31,15 +32,36 @@ def ask_meaning(question, correct_question):
 
 def generate_question(row):
     re = {}
-    temp = row.split(' ')
+    row.replace('  ', ' ')
+    temp = row.split(',')
     re['word'] = temp[0]
     re['pinyin'] = temp[1]
-    re['cor'] = temp[2]
-    ans = [temp[2], temp[3], temp[4], temp[5]]
+    re['cor'] = temp[2].replace('!', ' ')
+    ans = [temp[2].replace('!', ' '), temp[3].replace('!', ' '), temp[4].replace('!', ' '), temp[5].replace('!', ' ')]
     random.shuffle(ans)
     re['ans'] = ans
     re['group'] = temp[6]
     return re
+
+
+def calculate_vocab(correct):
+    result = [0 for _ in range(10)]
+    total = 0
+    for i in correct:
+        result[int(i)] += 1
+    print(result)
+    for j in range(len(result)):
+        print(group_calculate(j, result))
+        total += (group_calculate(j, result))
+    return int(total)
+
+
+def group_calculate(num, result):
+    GRPAMT = [2, 4, 11, 28, 73, 190, 495, 2088, 3341, 8687]
+    GRPSAMPLEAMT = [2, 3, 10, 5, 5, 5, 5, 5, 5, 5]
+    group = num
+    cor_num = result[num]
+    return (cor_num / GRPSAMPLEAMT[group]) * GRPAMT[group]
 
 
 def main():
@@ -56,7 +78,7 @@ def main():
             else:
                 break
 
-    total_question = len(store)
+    print(len(store))
 
     questions = []
     for i in range(len(store)):
@@ -67,6 +89,9 @@ def main():
         if count > QUESTION_AMT:
             print('Result: {} out of {} correct selection!'.format(len(correct_question), QUESTION_AMT))
             print('You have done this test! Congratz!')
+            print(correct_question)
+            vocab = calculate_vocab(correct_question)
+            print(vocab)
             break
         while True:
             print('==================\nQuestion {}'.format(count))
@@ -77,12 +102,12 @@ def main():
                     print("Great job!")
                     ask_meaning(question, correct_question)
                     break
+                print("Woops, it's not that correct :( Go to the next question...")
+                break
             elif know == 'n':
                 break
             else:
-                know = input(
-                    'You typed something that is not expected :(\nDo you know this word: "{}", answer by y/n ==> '.format(
-                        question['word']))
+                print('You typed something that is not expected :(')
 
 
 main()
