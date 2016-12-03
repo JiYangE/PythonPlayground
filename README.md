@@ -10,3 +10,5 @@ My playground for python programming.
 [Generate Chinese words from source dictionary](https://github.com/Kulbear/PythonPlayground/tree/master/word_generator)
 
 [Chinese words test](https://github.com/Kulbear/PythonPlayground/tree/master/word_test)
+
+[Fun visualization for a mandelbrot set](https://github.com/Kulbear/PythonPlayground/tree/master/mandelbrot)
