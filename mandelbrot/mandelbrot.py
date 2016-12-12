@@ -1,4 +1,5 @@
 from cImage import EmptyImage, ImageWin, Pixel
+from random import randint
 
 
 ###########################################################################
@@ -13,7 +14,6 @@ def instensity(pixel):
 # sorted by intensity.  Return a list of Pixels named 'color_list'
 ###########################################################################
 def generate_random_color_table(n):
-    from random import randint
     color_list = [Pixel(randint(0, 255), randint(0, 255), randint(0, 255))
                   for i in range(n)]
     color_list.sort(key=lambda p: instensity(p), reverse=True)

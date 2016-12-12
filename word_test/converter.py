@@ -1,3 +1,6 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import pandas as pd
 
 df = pd.read_excel('translation.xlsx')
@@ -30,3 +33,4 @@ for i in range(4):
             myrow['Wrong3'] = row['Wrong3'].replace(" ", "!") if type(row['Wrong3']) == type('str') else ''
             myrow['Group'] = row['Group']
             f.write('{},{},{},{},{},{},{}\n'.format(myrow['Word'], myrow['Pinyin'], myrow['Correct'], myrow['Wrong1'], myrow['Wrong2'], myrow['Wrong3'], myrow['Group']))
+    print('Done')
