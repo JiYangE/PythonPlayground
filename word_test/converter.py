@@ -26,7 +26,7 @@ for i in range(4):
             if str(row['Pinyin2']) == 'nan':
                 myrow['Pinyin'] = row['Pinyin1'].replace(" ", "")
             else:
-                myrow['Pinyin'] = row['Pinyin1'].replace(" ", "") + row['Pinyin2'].replace(" ", "")
+                myrow['Pinyin'] = row['Pinyin1'].replace(" ", "") + '@' +row['Pinyin2'].replace(" ", "")
             myrow['Correct'] = row['Correct'].replace(" ", "!")
             myrow['Wrong1'] = row['Wrong1'].replace(" ", "!")
             myrow['Wrong2'] = row['Wrong2'].replace(" ", "!")

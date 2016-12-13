@@ -3,13 +3,14 @@
 
 import random
 
+pattern = 'Your answer is {}, submit? Please press Enter if you are sure. If not, press any other key to change your answer'
 
 def ask_pinyin(question):
     pinyin = input('Enter Pinyin for "{}", ==> '.format(question['word']))
-    confirm = input('Your answer is {}, submit? (Just press Enter if you are sure)'.format(pinyin))
+    confirm = input(pattern.format(pinyin))
     while confirm != '':
         pinyin = input('Enter Pinyin for "{}", ==> '.format(question['word']))
-        confirm = input('Your answer is {}, submit? (Just press Enter if you are sure)'.format(pinyin))
+        confirm = input(pattern.format(pinyin))
     return pinyin in question['pinyin']
 
 
@@ -20,10 +21,10 @@ def ask_meaning(question, correct_question):
     selection = input("Your selection ==> ")
     while selection not in ['1', '2', '3', '4']:
         selection = input("You need to select from 1, 2, 3, and 4.\nYour selection ==> ")
-    confirm = input('Your answer is {}, submit? (Just press Enter if you are sure)'.format(selection))
+    confirm = input(pattern.format(selection))
     while confirm != '':
         selection = input("You need to select from 1, 2, 3, and 4.\nYour selection ==> ")
-        confirm = input('Your answer is {} {}, submit? (Just press Enter if you are sure)'.format(selection, question['ans'][int(selection)]))
+        confirm = input('Your answer is {} {}, submit? (Please press Enter if you are sure. If not, press any other key to change your answer.)'.format(selection, question['ans'][int(selection)]))
     judge = question['ans'][int(selection) - 1] == question['cor']
     if judge:
         correct_question.append(question['group'])
@@ -37,7 +38,7 @@ def generate_question(row):
     row.replace('  ', ' ')
     temp = row.split(',')
     re['word'] = temp[0]
-    re['pinyin'] = temp[1]
+    re['pinyin'] = temp[1].split('@')
     re['cor'] = temp[2].replace('!', ' ')
     ans = [temp[2].replace('!', ' '), temp[3].replace('!', ' '), temp[4].replace('!', ' '), temp[5].replace('!', ' ')]
     random.shuffle(ans)
@@ -65,7 +66,7 @@ def group_calculate(num, result):
 
 
 def main():
-    QUESTION_AMT = 5
+    QUESTION_AMT = 50
     count = 0
     correct_question = []
     store = []
@@ -86,18 +87,11 @@ def main():
     for i in range(len(store)):
         questions.append(generate_question(store[i]))
 
-    print('Reminder: The entered Pinyin format should be ni3hao3 for 你好')
+    print('Reminder:')
+    print('The entered Pinyin format should be ni3hao3 for 你好.')
+    print('Please do not put any space in between.')
     for question in questions:
         count += 1
-        if count > QUESTION_AMT:
-            if i_know > 0:
-                print('Result: {} out of {} correct Pinyin!'.format(i_actually_know, i_know), str((i_actually_know / i_know) * 100) + '%')
-            print('Result: {} out of {} correct selection!'.format(len(correct_question), QUESTION_AMT), str((len(correct_question) / QUESTION_AMT) * 100) + '%')
-            print('You have done this test! Congratz!')
-            # print(correct_question)
-            vocab = calculate_vocab(correct_question)
-            print('Your estimate vocabulary in Chinese is:', vocab)
-            break
         while True:
             print('==================\nQuestion {}'.format(count))
             know = input('Do you know this word: "{}", answer by y/n ==> '.format(question['word']))
@@ -115,6 +109,17 @@ def main():
                 break
             else:
                 print('You typed something that is not expected :(')
+
+
+        if count >= QUESTION_AMT:
+            if i_know > 0:
+                print('Result: {} out of {} correct Pinyin!'.format(i_actually_know, i_know), str((i_actually_know / i_know) * 100) + '%')
+            print('Result: {} out of {} correct selection!'.format(len(correct_question), QUESTION_AMT), str((len(correct_question) / QUESTION_AMT) * 100) + '%')
+            print('You have done this test! Congratz!')
+            # print(correct_question)
+            vocab = calculate_vocab(correct_question)
+            print('Your estimate vocabulary in Chinese is:', vocab)
+            break
 
 
 main()
